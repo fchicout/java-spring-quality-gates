@@ -737,20 +737,23 @@
       <section class="doc-section" id="s2">
         <div class="section-head"><span class="num">02</span><h2>Quality Gates no SonarQube &amp; Testes Automatizados</h2></div>
 
-        <p>O projeto está amarrado ao Quality Gate institucional <strong>"Sonar way"</strong> em <a href="https://sonar.fchicout.dev" target="_blank">sonar.fchicout.dev</a>. O pipeline do GitHub Actions valida e bloqueia o build caso qualquer limiar não seja cumprido:</p>
+        <p>O servidor <a href="https://sonar.fchicout.dev" target="_blank">sonar.fchicout.dev</a> adota o Quality Gate oficial e padrão <strong>"Sonar way"</strong> (baseado no princípio <em>Clean as You Code</em>). O pipeline do GitHub Actions valida e bloqueia o build (<code>-Dsonar.qualitygate.wait=true</code>) caso qualquer uma das seguintes regras seja violada no código novo:</p>
 
         <div class="table-wrap">
           <table>
-            <thead><tr><th>Métrica</th><th>Condição</th><th class="num">Limite Obrigatório</th></tr></thead>
+            <thead><tr><th>Métrica (Chave Interna)</th><th>Operador</th><th>Condição de Reprovação</th><th class="num">Limite Obrigatório</th></tr></thead>
             <tbody>
-              <tr><td>Coverage on New Code</td><td>menor que</td><td class="num"><span class="pill pill--pass">≥ 80%</span></td></tr>
-              <tr><td>Duplicated Lines on New Code</td><td>maior que</td><td class="num"><span class="pill pill--warn">≤ 3.0%</span></td></tr>
-              <tr><td>Reliability Rating (Bugs)</td><td>pior que</td><td class="num"><span class="pill pill--pass">A (0 bugs)</span></td></tr>
-              <tr><td>Security Rating (Vulnerabilidades)</td><td>pior que</td><td class="num"><span class="pill pill--pass">A (0 vulns)</span></td></tr>
-              <tr><td>Maintainability Rating (Code Smells)</td><td>pior que</td><td class="num"><span class="pill pill--pass">A</span></td></tr>
-              <tr><td>Security Hotspots Reviewed</td><td>menor que</td><td class="num"><span class="pill pill--pass">100%</span></td></tr>
+              <tr><td><strong>Coverage on New Code</strong> (<code>new_coverage</code>)</td><td><code>LT</code> (Menor que)</td><td>Menor que 80.0%</td><td class="num"><span class="pill pill--pass">≥ 80.0%</span></td></tr>
+              <tr><td><strong>Duplicated Lines on New Code</strong> (<code>new_duplicated_lines_density</code>)</td><td><code>GT</code> (Maior que)</td><td>Maior que 3.0%</td><td class="num"><span class="pill pill--warn">≤ 3.0%</span></td></tr>
+              <tr><td><strong>Security Hotspots Reviewed</strong> (<code>new_security_hotspots_reviewed</code>)</td><td><code>LT</code> (Menor que)</td><td>Menor que 100.0%</td><td class="num"><span class="pill pill--pass">100.0%</span></td></tr>
+              <tr><td><strong>New Issues / Violations</strong> (<code>new_violations</code>)</td><td><code>GT</code> (Maior que)</td><td>Maior que 0</td><td class="num"><span class="pill pill--fail">0 Novas Violações</span></td></tr>
             </tbody>
           </table>
+        </div>
+
+        <div class="callout callout--rule">
+          <span class="tag">Clean as You Code</span>
+          <p>O <strong>Sonar way</strong> garante que todo novo commit ou Pull Request mantenha dívida técnica zero: <strong>zero</strong> novos bugs, <strong>zero</strong> novas vulnerabilidades, <strong>zero</strong> novos code smells, e no mínimo <strong>80%</strong> de cobertura por testes automatizados.</p>
         </div>
 
         <h3 id="s2-2"><span class="num">2.2</span>Padrões de Teste: JUnit 5, JaCoCo &amp; Vitest</h3>
