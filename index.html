@@ -447,6 +447,136 @@
   .tok-ann  { color: #F0B65E; }
   .tok-com  { color: #6E7A8A; font-style: italic; }
 
+
+  /* ---------- Click-to-Zoom Fullscreen Feature ---------- */
+  .diagram-container, figure, img.zoomable {
+    cursor: zoom-in;
+    position: relative;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  }
+  .diagram-container:hover, figure:hover, img.zoomable:hover {
+    border-color: var(--accent);
+    box-shadow: 0 4px 16px rgba(36, 82, 168, 0.15);
+  }
+  .diagram-container::after {
+    content: "🔍 Clique para tela cheia";
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    background: var(--surface-2);
+    color: var(--ink-muted);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 500;
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    box-shadow: var(--shadow);
+  }
+  .diagram-container:hover::after {
+    opacity: 1;
+  }
+
+  .zoom-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    background: rgba(10, 14, 20, 0.88);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: zoom-out;
+  }
+  .zoom-modal.is-active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .zoom-modal__dialog {
+    position: relative;
+    max-width: 96vw;
+    max-height: 92vh;
+    width: auto;
+    height: auto;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px 28px 24px;
+    box-shadow: 0 32px 80px rgba(0, 0, 0, 0.6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+    cursor: default;
+    transform: scale(0.96);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .zoom-modal.is-active .zoom-modal__dialog {
+    transform: scale(1);
+  }
+  .zoom-modal__close {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    background: var(--surface-2);
+    color: var(--ink);
+    border: 1px solid var(--border);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .zoom-modal__close:hover {
+    background: var(--fail);
+    color: #fff;
+    border-color: var(--fail);
+  }
+  .zoom-modal__body {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+  }
+  .zoom-modal__body svg {
+    max-width: 90vw !important;
+    max-height: 80vh !important;
+    width: auto !important;
+    height: auto !important;
+    min-width: 60vw;
+  }
+  .zoom-modal__body img {
+    max-width: 90vw;
+    max-height: 80vh;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 6px;
+  }
+  .zoom-modal__hint {
+    margin-top: 14px;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--ink-faint);
+    text-align: center;
+  }
+
   /* ---------- Rule matrix cards ---------- */
   .branch-grid {
     display: grid;
@@ -1735,8 +1865,87 @@ Project Charter (Visão & Dores)
       });
     }, { rootMargin: '-15% 0px -70% 0px' });
     targets.forEach(function (t) { observer.observe(t); });
+
+    // ---------- Click-to-Zoom Fullscreen Implementation ----------
+    var zoomModal = document.getElementById('zoomModal');
+    var zoomDialog = document.getElementById('zoomDialog');
+    var zoomBody = document.getElementById('zoomBody');
+    var zoomClose = document.getElementById('zoomClose');
+
+    function openZoom(contentNode) {
+      zoomBody.innerHTML = '';
+      var clone = contentNode.cloneNode(true);
+      // Remove any fixed height or width styles that might constrain fullscreen
+      if (clone.tagName && clone.tagName.toLowerCase() === 'svg') {
+        clone.removeAttribute('style');
+        clone.style.width = '100%';
+        clone.style.height = 'auto';
+      }
+      zoomBody.appendChild(clone);
+      zoomModal.classList.add('is-active');
+      zoomModal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeZoom() {
+      zoomModal.classList.remove('is-active');
+      zoomModal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      setTimeout(function () { zoomBody.innerHTML = ''; }, 200);
+    }
+
+    // Attach click listeners to diagram containers, SVGs and images
+    function bindZoomables() {
+      var targets = document.querySelectorAll('.diagram-container, figure, img.zoomable');
+      targets.forEach(function (container) {
+        if (container.dataset.zoomBound) return;
+        container.dataset.zoomBound = 'true';
+        container.addEventListener('click', function (e) {
+          var svg = container.querySelector('svg');
+          var img = container.querySelector('img');
+          if (svg) {
+            openZoom(svg);
+          } else if (img) {
+            openZoom(img);
+          } else {
+            openZoom(container);
+          }
+        });
+      });
+    }
+
+    // Initial binding and re-binding after Mermaid finishes rendering
+    bindZoomables();
+    if (window.mermaid) {
+      setTimeout(bindZoomables, 1000);
+      setTimeout(bindZoomables, 2500);
+    }
+
+    zoomClose.addEventListener('click', closeZoom);
+    zoomModal.addEventListener('click', function (e) {
+      if (e.target === zoomModal) {
+        closeZoom();
+      }
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && zoomModal.classList.contains('is-active')) {
+        closeZoom();
+      }
+    });
+
   })();
 </script>
+
+
+<!-- Fullscreen Zoom Lightbox Modal -->
+<div id="zoomModal" class="zoom-modal" aria-hidden="true" role="dialog" aria-label="Visualização em Tela Cheia">
+  <div class="zoom-modal__dialog" id="zoomDialog">
+    <button class="zoom-modal__close" id="zoomClose" aria-label="Fechar zoom">✕ Fechar (Esc)</button>
+    <div class="zoom-modal__body" id="zoomBody"></div>
+    <div class="zoom-modal__hint">Pressione ESC ou clique fora para retornar à página</div>
+  </div>
+</div>
 
 </body>
 </html>
