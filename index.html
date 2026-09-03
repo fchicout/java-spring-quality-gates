@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>λ</text></svg>">
 <title>Padrão de Arquitetura, Quality Gates &amp; DevSecOps — Java 21 &amp; Angular 22</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1826,6 +1827,15 @@ Project Charter (Visão & Dores)
   </main>
 </div>
 
+<!-- Fullscreen Zoom Lightbox Modal -->
+<div id="zoomModal" class="zoom-modal" aria-hidden="true" role="dialog" aria-label="Visualização em Tela Cheia">
+  <div class="zoom-modal__dialog" id="zoomDialog">
+    <button class="zoom-modal__close" id="zoomClose" aria-label="Fechar zoom">✕ Fechar (Esc)</button>
+    <div class="zoom-modal__body" id="zoomBody"></div>
+    <div class="zoom-modal__hint">Pressione ESC ou clique fora para retornar à página</div>
+  </div>
+</div>
+
 <script>
   (function () {
     var root = document.documentElement;
@@ -1836,20 +1846,26 @@ Project Charter (Visão & Dores)
     }
     function label() {
       var t = root.getAttribute('data-theme');
-      themeBtn.textContent = 'Tema: ' + (t === 'dark' ? 'Escuro' : t === 'light' ? 'Claro' : 'Auto');
+      if (themeBtn) {
+        themeBtn.textContent = 'Tema: ' + (t === 'dark' ? 'Escuro' : t === 'light' ? 'Claro' : 'Auto');
+      }
     }
     label();
-    themeBtn.addEventListener('click', function () {
-      var current = root.getAttribute('data-theme');
-      var next = current === 'dark' ? 'light' : current === 'light' ? null : 'dark';
-      if (next) { root.setAttribute('data-theme', next); localStorage.setItem('doc-theme', next); }
-      else { root.removeAttribute('data-theme'); localStorage.removeItem('doc-theme'); }
-      label();
-    });
+    if (themeBtn) {
+      themeBtn.addEventListener('click', function () {
+        var current = root.getAttribute('data-theme');
+        var next = current === 'dark' ? 'light' : current === 'light' ? null : 'dark';
+        if (next) { root.setAttribute('data-theme', next); localStorage.setItem('doc-theme', next); }
+        else { root.removeAttribute('data-theme'); localStorage.removeItem('doc-theme'); }
+        label();
+      });
+    }
 
     var tocToggle = document.getElementById('tocToggle');
     var toc = document.getElementById('toc');
-    tocToggle.addEventListener('click', function () { toc.classList.toggle('is-open'); });
+    if (tocToggle && toc) {
+      tocToggle.addEventListener('click', function () { toc.classList.toggle('is-open'); });
+    }
 
     var links = Array.prototype.slice.call(document.querySelectorAll('.toc nav a'));
     var targets = links.map(function (a) { return document.querySelector(a.getAttribute('href')); }).filter(Boolean);
@@ -1873,14 +1889,29 @@ Project Charter (Visão & Dores)
     var zoomClose = document.getElementById('zoomClose');
 
     function openZoom(contentNode) {
+      if (!zoomModal || !zoomBody) return;
       zoomBody.innerHTML = '';
+      
       var clone = contentNode.cloneNode(true);
-      // Remove any fixed height or width styles that might constrain fullscreen
+      
+      // If SVG (Mermaid diagram), ensure responsive scaling without width caps
       if (clone.tagName && clone.tagName.toLowerCase() === 'svg') {
-        clone.removeAttribute('style');
+        clone.style.maxWidth = '100%';
+        clone.style.maxHeight = '80vh';
         clone.style.width = '100%';
         clone.style.height = 'auto';
+        clone.removeAttribute('height');
+      } else if (clone.classList && clone.classList.contains('diagram-container')) {
+        // Look inside container
+        var svgInside = clone.querySelector('svg');
+        if (svgInside) {
+          svgInside.style.maxWidth = '100%';
+          svgInside.style.maxHeight = '80vh';
+          svgInside.style.width = '100%';
+          svgInside.style.height = 'auto';
+        }
       }
+
       zoomBody.appendChild(clone);
       zoomModal.classList.add('is-active');
       zoomModal.setAttribute('aria-hidden', 'false');
@@ -1888,10 +1919,15 @@ Project Charter (Visão & Dores)
     }
 
     function closeZoom() {
+      if (!zoomModal || !zoomBody) return;
       zoomModal.classList.remove('is-active');
       zoomModal.setAttribute('aria-hidden', 'true');
       document.body.style.overflow = '';
-      setTimeout(function () { zoomBody.innerHTML = ''; }, 200);
+      setTimeout(function () { 
+        if (!zoomModal.classList.contains('is-active')) {
+          zoomBody.innerHTML = ''; 
+        }
+      }, 200);
     }
 
     // Attach click listeners to diagram containers, SVGs and images
@@ -1900,7 +1936,9 @@ Project Charter (Visão & Dores)
       targets.forEach(function (container) {
         if (container.dataset.zoomBound) return;
         container.dataset.zoomBound = 'true';
+        container.style.cursor = 'zoom-in';
         container.addEventListener('click', function (e) {
+          // If clicked inside, grab the SVG or IMG
           var svg = container.querySelector('svg');
           var img = container.querySelector('img');
           if (svg) {
@@ -1914,38 +1952,37 @@ Project Charter (Visão & Dores)
       });
     }
 
-    // Initial binding and re-binding after Mermaid finishes rendering
+    // Bind immediately, on DOMContentLoaded and on window load / Mermaid render
     bindZoomables();
-    if (window.mermaid) {
-      setTimeout(bindZoomables, 1000);
-      setTimeout(bindZoomables, 2500);
+    window.addEventListener('DOMContentLoaded', bindZoomables);
+    window.addEventListener('load', bindZoomables);
+    
+    // Periodically check in the first 4 seconds for dynamically rendered Mermaid SVGs
+    var attempts = 0;
+    var interval = setInterval(function () {
+      bindZoomables();
+      attempts++;
+      if (attempts > 8) clearInterval(interval);
+    }, 500);
+
+    if (zoomClose) {
+      zoomClose.addEventListener('click', closeZoom);
+    }
+    if (zoomModal) {
+      zoomModal.addEventListener('click', function (e) {
+        if (e.target === zoomModal || e.target === zoomBody) {
+          closeZoom();
+        }
+      });
     }
 
-    zoomClose.addEventListener('click', closeZoom);
-    zoomModal.addEventListener('click', function (e) {
-      if (e.target === zoomModal) {
-        closeZoom();
-      }
-    });
-
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && zoomModal.classList.contains('is-active')) {
+      if (e.key === 'Escape' && zoomModal && zoomModal.classList.contains('is-active')) {
         closeZoom();
       }
     });
-
   })();
 </script>
-
-
-<!-- Fullscreen Zoom Lightbox Modal -->
-<div id="zoomModal" class="zoom-modal" aria-hidden="true" role="dialog" aria-label="Visualização em Tela Cheia">
-  <div class="zoom-modal__dialog" id="zoomDialog">
-    <button class="zoom-modal__close" id="zoomClose" aria-label="Fechar zoom">✕ Fechar (Esc)</button>
-    <div class="zoom-modal__body" id="zoomBody"></div>
-    <div class="zoom-modal__hint">Pressione ESC ou clique fora para retornar à página</div>
-  </div>
-</div>
 
 </body>
 </html>
