@@ -568,10 +568,26 @@
           </ol>
         </li>
         <li><a href="#s5">5 · Ambientes Multi-Profile</a></li>
+        <li><a href="#s6">6 · Suite de Documentação (docs/)</a>
+          <ol>
+            <li><a href="#s6-0">6.0 Governança &amp; Rastreabilidade</a></li>
+            <li><a href="#s6-1">6.1 Architecture Frontier (ADRs)</a></li>
+            <li><a href="#s6-2">6.2 Project Charter (IEEE 15288)</a></li>
+            <li><a href="#s6-3">6.3 Requisitos SRS (IEEE 29148)</a></li>
+            <li><a href="#s6-4">6.4 Casos de Uso (Cockburn)</a></li>
+            <li><a href="#s6-5">6.5 User Stories (INVEST / GWT)</a></li>
+            <li><a href="#s6-6">6.6 DevOps &amp; CI/CD Pipeline</a></li>
+            <li><a href="#s6-7">6.7 Telas &amp; Acessibilidade (WCAG)</a></li>
+            <li><a href="#s6-8">6.8 UI/UX Walkthrough Roadmap</a></li>
+            <li><a href="#s6-9">6.9 Bootstrap Plan (Monorepo)</a></li>
+            <li><a href="#s6-10">6.10 Índice &amp; Governança (README)</a></li>
+          </ol>
+        </li>
       </ol>
     </nav>
     <div class="toc__foot">
-      <a class="btn-download" href="assets/fullstack-starter.zip" download="fullstack-starter.zip">📦 Baixar Template (.ZIP)</a>
+      <a class="btn-download" href="assets/fullstack-starter.zip" download="fullstack-starter.zip">📦 Baixar Starter (.ZIP)</a>
+      <a class="btn-download" style="background: var(--surface-2); color: var(--ink); border-color: var(--border);" href="assets/docs-templates.zip" download="docs-templates.zip">📑 Baixar Templates docs/ (.ZIP)</a>
       <button class="theme-btn" id="themeToggle">Tema: Auto</button>
       <button class="theme-btn" onclick="window.print()">Imprimir Guia</button>
     </div>
@@ -611,11 +627,34 @@
       <section class="doc-section" id="s0">
         <div class="section-head"><span class="num">00</span><h2>Template de Scaffolding &amp; Repositórios</h2></div>
 
-        <p>Cada equipe deve inicializar e versionar o projeto utilizando <strong>estritamente</strong> as seguintes nomenclaturas padronizadas no GitHub:</p>
-        <ul>
-          <li><strong>Equipe DaMatch:</strong> <code>senac-fullstack-damatch</code></li>
-          <li><strong>Equipe Azrael:</strong> <code>senac-fullstack-azrael</code></li>
-        </ul>
+        <p>Cada equipe deve inicializar e versionar o projeto utilizando <strong>estritamente</strong> as seguintes nomenclaturas padronizadas no GitHub e vinculadas aos painéis de auditoria:</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Equipe de Extensão</th>
+                <th>Identificador do Projeto (SonarQube)</th>
+                <th>Repositório GitHub Oficial</th>
+                <th>Status do Projeto</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Equipe DaMatch</strong></td>
+                <td><code>senac-fullstack-damatch</code></td>
+                <td><a href="https://github.com/Diogo746/Projeto-Full-Stack/" target="_blank" rel="noopener noreferrer">github.com/Diogo746/Projeto-Full-Stack</a></td>
+                <td><span class="pill pill--pass">Ativo / Em Desenvolvimento</span></td>
+              </tr>
+              <tr>
+                <td><strong>Equipe Azrael</strong></td>
+                <td><code>senac-fullstack-azrael</code></td>
+                <td><a href="https://github.com/HtaOliva/Azrael" target="_blank" rel="noopener noreferrer">github.com/HtaOliva/Azrael</a></td>
+                <td><span class="pill pill--pass">Ativo / Em Desenvolvimento</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
         <h3><span class="num">0.1</span>Estrutura do Repositório Gerado</h3>
         <div class="code-block">
@@ -937,6 +976,715 @@ management:
   endpoint:
     health:
       show-details: never</code></pre>
+        </div>
+      </section>
+
+      
+      <!-- ============ SECTION 6 ============ -->
+      <section class="doc-section" id="s6">
+        <div class="section-head"><span class="num">06</span><h2>Suite de Templates de Engenharia de Software (<code>docs/</code>)</h2></div>
+
+        <p class="lede">
+          Para assegurar conformidade com os padrões de engenharia de software enterprise e orientar o ciclo de vida do Projeto Integrador e Extensão, disponibilizamos a <strong>Suite Oficial de Documentação</strong> (inspirada na arquitetura documental do projeto corporativo <em>Corbenic</em>).
+        </p>
+
+        <div class="action-banner">
+          <div>
+            <strong>Pacote Completo de Templates Markdown</strong>
+            <p>Faça o download de todos os arquivos <code>.md</code> prontos para inclusão na pasta <code>docs/</code> do seu repositório.</p>
+          </div>
+          <a class="btn-download" href="assets/docs-templates.zip" download="docs-templates.zip">📑 Baixar docs-templates.zip</a>
+        </div>
+
+        <h3 id="s6-0"><span class="num">6.0</span>Visão Holística &amp; Cadeia de Rastreabilidade</h3>
+        <p>
+          Em engenharia de software profissional, nenhum código é escrito no vácuo. Cada linha de código no backend ou componente no frontend deve obrigatoriamente rastrear até uma História de Usuário, que por sua vez satisfaz um Requisito Funcional originado na dor do parceiro real (ONG):
+        </p>
+
+        <div class="diagram-container">
+          <pre class="mermaid">
+flowchart TD
+    Charter["01-project-charter.md (Visão & Dores do Cliente)"]
+    SRS["02-software-requirements-specification.md (REQ-* / NFR-*)"]
+    UC["03-use-cases.md (Casos de Uso Cockburn: UC-*)"]
+    US["04-user-stories.md (Backlog INVEST com GWT: US-*)"]
+    ADR["00-architecture-frontier.md (Decisões de Arquitetura: ADR)"]
+    CICD["05-devops-and-cicd.md (Esteira CI/CD & SonarQube)"]
+    UIUX["06-ui-ux-screen-descriptions.md (Wireframes & WCAG)"]
+    Code["Código Fonte (Spring Boot + Angular + SQLite)"]
+
+    Charter -->|Gera Requisitos| SRS
+    SRS -->|Modela Fluxos| UC
+    SRS & UC -->|Derivam Histórias| US
+    ADR & CICD & UIUX -->|Guiam a Implementação| Code
+    US -->|Rastreia| Code
+          </pre>
+        </div>
+
+        <div class="callout callout--rule">
+          <span class="tag">Diretriz de Governança</span>
+          <p>
+            Copie a pasta <code>docs/</code> para a raiz do repositório da equipe (ao lado de <code>backend/</code> e <code>frontend/</code>). Mantenha todos os arquivos versionados no Git e atualize os documentos conforme a evolução das Sprints.
+          </p>
+        </div>
+
+        <hr style="border: 0; border-top: 1px solid var(--border); margin: 36px 0;" />
+
+        <!-- 6.1 -->
+        <h3 id="s6-1"><span class="num">6.1</span><code>00-architecture-frontier.md</code> — Decisões Arquiteturais (ADRs)</h3>
+        <p>
+          <strong>Padrão / Framework:</strong> <em>Architecture Decision Records (ADR) &amp; C4 Model (System Context)</em>.<br>
+          <strong>Objetivo:</strong> Documentar o diagrama de contexto de alto nível e registrar formalmente as decisões técnicas que afetam o projeto (ex: adoção do SQLite3, integração com LLDAP, uso de Spring Boot 3.3 e Angular Zoneless).
+        </p>
+        <div class="code-block">
+          <div class="code-block__bar"><span>docs/00-architecture-frontier.md</span><div class="dots"><span></span><span></span><span></span></div></div>
+          <pre><code># 00 — Architecture Frontier & Decisões Arquiteturais (ADR)
+
+**Projeto:** [Nome do Projeto de Extensão Full Stack]  
+**Equipe:** [Nome da Equipe / Alunos]  
+**Organização Parceira (ONG):** [Nome da Organização Parceira]  
+
+---
+
+## 1. Visão Geral da Arquitetura (System Context)
+
+Descreva em alto nível o ecossistema da aplicação, as fronteiras entre os subsistemas e a integração com serviços externos.
+
+```mermaid
+flowchart TD
+    subgraph Client ["Frontend: Single Page Application (SPA)"]
+        UI ["Angular v17+ (Standalone Components, RxJS, Tailwind/CSS)"]
+    end
+
+    subgraph Gateway ["Camada de Borda / Segurança"]
+        AuthGuard ["Auth Interceptor / Route Guards (JWT Bearer Token)"]
+    end
+
+    subgraph Backend ["Backend: API REST Enterprise"]
+        Spring ["Spring Boot 3.x (Spring Web, Spring Security, Spring Data JPA)"]
+        LLDAPClient ["Cliente de Autenticação LDAP / LLDAP"]
+    end
+
+    subgraph Persistence ["Camada de Dados & Infraestrutura"]
+        SQLite [("Banco de Dados SQLite3 (extensao.db)")]
+        LLDAPServer [("Servidor LLDAP / Homelab (cn=gestor, cn=operador)")]
+    end
+
+    UI --&gt;|HTTP / REST JSON| Gateway
+    Gateway --&gt;|Requisições Autenticadas| Spring
+    Spring --&gt;|Validação de Credenciais| LLDAPClient
+    LLDAPClient &lt;--&gt;|Bind LDAP| LLDAPServer
+    Spring &lt;--&gt;|JPA / Hibernate ORM| SQLite
+```
+
+---
+
+## 2. Matriz Tecnológica Obrigatória (Tech Stack)
+
+| Camada | Tecnologia Adotada | Justificativa Técnica |
+| :--- | :--- | :--- |
+| **Front-End** | **Angular 17+ / 18+** | Framework opinado, tipagem estrita com TypeScript, arquitetura de componentes e injeção de dependências nativa. |
+| **Back-End** | **Java SE 21 + Spring Boot 3.x** | Padrão corporativo, robustez em APIs REST, segurança integrada (`Spring Security`) e validações declarativas (`@Valid`). |
+| **Persistência** | **Spring Data JPA + SQLite3** | Facilidade de implantação local/edge sem necessidade de gerenciar daemons de banco pesados, portabilidade e persistência em arquivo único (`extensao.db`). |
+| **Autenticação** | **LLDAP (LDAP Light)** | Gestão centralizada de identidades e RBAC (*Role-Based Access Control*) com grupos institucionais. |
+| **Qualidade & CI/CD** | **GitHub Actions + SonarQube** | Validação automatizada de testes, cobertura de código e aplicação de Quality Gate estrito. |
+
+---
+
+## 3. Architecture Decision Records (ADR)
+
+### 📄 ADR-001: Adoção do SQLite3 para o MVP de Extensão Comunitária
+* **Status:** Aprovado.
+* **Contexto:** A organização parceira possui infraestrutura computacional enxuta e necessita de um sistema de manutenção simplificada e backup por cópia de arquivo.
+* **Decisão:** Utilizar SQLite3 via driver JPA para simplificar a esteira de deploy e eliminar custos de infraestrutura de nuvem na fase de validação.
+* **Consequências:** Deploy em container único; necessidade de controle de concorrência de escrita via WAL mode (`PRAGMA journal_mode=WAL`).
+
+### 📄 ADR-002: Gestão de Identidades Centralizada via LLDAP
+* **Status:** Aprovado.
+* **Contexto:** Segregação de papéis entre administradores da ONG, voluntários operadores e beneficiários comunitários.
+* **Decisão:** Autenticação delegada ao servidor LLDAP do homelab com mapeamento de *Roles* para Authorities do Spring Security.
+</code></pre>
+        </div>
+
+        <!-- 6.2 -->
+        <h3 id="s6-2"><span class="num">6.2</span><code>01-project-charter.md</code> — Termo de Abertura do Projeto</h3>
+        <p>
+          <strong>Padrão / Framework:</strong> <em>IEEE/ISO/IEC 15288 (System Life Cycle Processes)</em>.<br>
+          <strong>Objetivo:</strong> Formalizar o "porquê" do projeto existir, a identificação do parceiro comunitário (ONG), o problema real diagnosticado, o escopo rígido (<em>In-Scope</em> vs. <em>Out-of-Scope</em>), metas SMART e os marcos do semestre.
+        </p>
+        <div class="code-block">
+          <div class="code-block__bar"><span>docs/01-project-charter.md</span><div class="dots"><span></span><span></span><span></span></div></div>
+          <pre><code># 01 — Project Charter (Termo de Abertura do Projeto)
+
+**Padrão:** Alinhado aos princípios de planejamento de projetos de software da **IEEE/ISO/IEC 15288**.  
+**Componente Curricular:** Unidade de Extensão: Full Stack (ADS 5P — 2026.2)  
+**Instituição:** Faculdade Senac Pernambuco  
+
+---
+
+## 1. Justificativa & Problema de Negócio (Problem Statement)
+
+* **Organização Parceira:** [Nome da ONG, Associação Comunitária ou Instituição Beneficiada]
+* **Diagnóstico da Dor:** [Descreva o problema real enfrentado pelo parceiro. Ex: Gestão manual de doações em planilhas de papel, filas desorganizadas para atendimento social, falta de rastreabilidade de estoques de alimentos, etc.]
+* **Impacto Social Gerado:** [Como o software desenvolvido transformará a operação da instituição e beneficiará a comunidade local?]
+
+---
+
+## 2. Objetivos & Critérios de Sucesso do Projeto (SMART)
+
+* **O1:** Desenvolver e homologar uma plataforma web Full Stack (Angular + Spring Boot) que automatize 100% do fluxo de [Fluxo Principal. Ex: Cadastro e Distribuição de Cestas Básicas].
+* **O2:** Integrar a autenticação com controle de acesso baseado em papéis (RBAC) via LLDAP, garantindo que voluntários e gestores tenham acessos segregados.
+* **O3:** Implementar pipeline automatizado de CI/CD via GitHub Actions com aprovação obrigatória no Quality Gate do SonarQube (Zero vulnerabilidades críticas e &gt; 80% de cobertura de testes).
+* **O4:** Capacitar os colaboradores da ONG parceira através de documentação de uso e realizar a transferência de tecnologia até o final do semestre letivo 2026.2.
+
+---
+
+## 3. Escopo do Projeto (Scope Baseline)
+
+### ✅ Dentro do Escopo (In-Scope)
+- [Funcionalidade 1: Ex. Módulo de Cadastro e Validação de Famílias Beneficiárias]
+- [Funcionalidade 2: Ex. Painel de Controle de Entradas e Saídas de Doações]
+- [Funcionalidade 3: Ex. Emissão de Relatórios em PDF/CSV para prestação de contas]
+- [Funcionalidade 4: Ex. Autenticação e Gestão de Sessão Segura com LLDAP / JWT]
+- [Funcionalidade 5: Ex. Interface Responsiva e Acessível (WCAG Nível AA)]
+
+### ❌ Fora do Escopo (Out-of-Scope)
+- Aplicativo móvel nativo (iOS / Android) — o foco é Web App responsivo.
+- Integração com gateways de pagamento com cartão de crédito na versão inicial (MVP).
+- Módulos contábeis ou de folha de pagamento complexos.
+
+---
+
+## 4. Partes Interessadas (Stakeholders)
+
+| Papel | Representante / Contato | Responsabilidade no Projeto |
+| :--- | :--- | :--- |
+| **Cliente / Parceiro Real** | [Nome do Representante da ONG] | Validação dos requisitos de negócio, aceite das histórias de usuário e homologação. |
+| **Tech Lead / Aluno 1** | [Nome do Aluno] | Arquitetura de software, modelagem de dados e pipeline CI/CD. |
+| **Full Stack Dev / Aluno 2** | [Nome do Aluno] | Implementação de APIs REST Spring Boot e componentes Angular. |
+| **QA / Frontend Dev / Aluno 3**| [Nome do Aluno] | Design System, Acessibilidade UX/UI e testes automatizados. |
+| **Docente / Sponsor** | Prof. Fábio Chicout | Governança acadêmica, mentoria técnica e avaliação das releases. |
+
+---
+
+## 5. Cronograma de Marcos e Entregas (Milestones)
+
+| Marco | Prazo Estimado | Entregável Principal |
+| :---: | :---: | :--- |
+| **M0** | 28/Ago/2026 | Project Charter aprovado & 5 Primeiras User Stories refinadas. |
+| **M1** | 04/Set/2026 | Arquitetura Backend Spring Boot + JPA + SQLite3 inicializada. |
+| **M2** | 11/Set/2026 | Frontend Angular + Design System configurados. |
+| **M3** | 18/Set/2026 | Pipeline GitHub Actions & Release `v0.1.0-alpha` (Protótipo). |
+| **M4** | 02/Out/2026 | Sprint 1 & 2: Autenticação LLDAP e Funcionalidades Core. |
+| **M5** | 30/Out/2026 | Homologação com a ONG em ambiente Staging (`v0.5.0-beta`). |
+| **M6** | 27/Nov/2026 | Deploy Final em Produção (`v1.0.0`), Treinamento & Pitch no Senac. |
+
+---
+
+## 6. Riscos & Plano de Mitigação
+
+| Risco Identificado | Severidade | Ação Preventiva / Mitigação |
+| :--- | :---: | :--- |
+| Indisponibilidade ou atraso de feedback da ONG parceira. | Média | Agendamento de reuniões quinzenais curtas e envio de vídeos demonstrativos do protótipo navegável. |
+| Dificuldade técnica na integração com servidor LLDAP. | Alta | Utilização do template oficial de Spring Security LDAP fornecido na disciplina e mock local para desenvolvimento. |
+| Reprovação no Quality Gate do SonarQube por dívida técnica. | Alta | Rodar o linter e testes unitários localmente antes de cada Pull Request. |
+</code></pre>
+        </div>
+
+        <!-- 6.3 -->
+        <h3 id="s6-3"><span class="num">6.3</span><code>02-software-requirements-specification.md</code> — Requisitos (SRS)</h3>
+        <p>
+          <strong>Padrão / Framework:</strong> <em>IEEE 29148-2018 (Requirements Engineering)</em>.<br>
+          <strong>Objetivo:</strong> Catalogar detalhadamente os Requisitos Funcionais (<code>REQ-AUTH-*</code>, <code>REQ-CORE-*</code>, <code>REQ-REP-*</code>) e Não Funcionais (<code>NFR-SEC-*</code>, <code>NFR-PERF-*</code>, <code>NFR-A11Y-*</code>, <code>NFR-QUAL-*</code>), servindo como contrato técnico do sistema.
+        </p>
+        <div class="code-block">
+          <div class="code-block__bar"><span>docs/02-software-requirements-specification.md</span><div class="dots"><span></span><span></span><span></span></div></div>
+          <pre><code># 02 — Software Requirements Specification (SRS)
+
+**Padrão:** Estruturado conforme a norma **IEEE 29148-2018** (Systems and software engineering — Life cycle processes — Requirements engineering).  
+
+---
+
+## 1. Requisitos Funcionais (Functional Requirements)
+
+Cada requisito possui um identificador unívoco no formato `REQ-XXX` para assegurar rastreabilidade bidirecional.
+
+### Módulo: Autenticação e Perfis (AUTH)
+* **`REQ-AUTH-01` (Login Centralizado):** O sistema deve autenticar usuários contra a base LLDAP utilizando credenciais institucionais seguras.
+* **`REQ-AUTH-02` (Controle de Acesso RBAC):** O sistema deve restringir o acesso a rotas do frontend e endpoints do backend conforme o papel do usuário (`ROLE_GESTOR`, `ROLE_OPERADOR`, `ROLE_BENEFICIARIO`).
+* **`REQ-AUTH-03` (Expiração de Sessão):** O token de autenticação JWT deve expirar em no máximo 2 horas de inatividade, exigindo nova autenticação.
+
+### Módulo: Gestão do Fluxo Principal (CORE)
+* **`REQ-CORE-01` (Cadastro de Entidades):** O sistema deve permitir o cadastro, listagem, edição e desativação lógica (soft delete) de [Entidade Principal. Ex: Beneficiários / Doações].
+* **`REQ-CORE-02` (Validação de Dados):** O sistema deve validar no backend (Spring `@Valid`) a unicidade de documentos (CPF/CNPJ), formato de e-mail e campos de preenchimento obrigatório.
+* **`REQ-CORE-03` (Registro de Movimentações):** Toda alteração de estado crítico no sistema deve registrar data/hora e o ID do operador responsável (Trilha de Auditoria).
+
+### Módulo: Relatórios e Transparência (REP)
+* **`REQ-REP-01` (Exportação de Dados):** O sistema deve permitir que usuários gestores exportem relatórios consolidados em formatos CSV e PDF.
+* **`REQ-REP-02` (Dashboard de Indicadores):** A tela inicial do gestor deve exibir métricas resumidas (Total atendido no mês, saldo disponível, pendências).
+
+---
+
+## 2. Requisitos Não Funcionais (Non-Functional Requirements)
+
+| Identificador | Categoria | Especificação Técnica |
+| :--- | :--- | :--- |
+| **`NFR-SEC-01`** | Segurança | Todas as senhas trafegadas devem ser protegidas por TLS/HTTPS. Nenhuma senha ou chave de API deve ser salva em texto plano. |
+| **`NFR-PERF-01`**| Performance | 95% das consultas REST com filtros padrão devem responder em tempo inferior a **500ms** no ambiente de homologação. |
+| **`NFR-A11Y-01`**| Acessibilidade | A interface Angular deve atender às diretrizes de acessibilidade **WCAG 2.1 Nível AA** (contraste de cores adequado e navegação via teclado). |
+| **`NFR-COMP-01`**| Compatibilidade | O frontend deve ser totalmente responsivo, funcionando perfeitamente em telas móveis (&ge; 360px) e desktops (&ge; 1080px). |
+| **`NFR-QUAL-01`**| Qualidade de Código | O código-fonte deve ser aprovado no SonarQube com **Quality Gate Verde (Passed)**, sem vulnerabilidades (*Security Rating A*) e com cobertura de testes unitários &ge; 70%. |
+</code></pre>
+        </div>
+
+        <!-- 6.4 -->
+        <h3 id="s6-4"><span class="num">6.4</span><code>03-use-cases.md</code> — Casos de Uso (Fully-Dressed)</h3>
+        <p>
+          <strong>Padrão / Framework:</strong> <em>Alistair Cockburn (Writing Effective Use Cases)</em>.<br>
+          <strong>Objetivo:</strong> Descrever os fluxos operacionais detalhados dos atores no sistema, cobrindo pré-condições, fluxo principal (caminho feliz), fluxos alternativos e tratamento rigoroso de exceções e erros.
+        </p>
+        <div class="code-block">
+          <div class="code-block__bar"><span>docs/03-use-cases.md</span><div class="dots"><span></span><span></span><span></span></div></div>
+          <pre><code># 03 — Especificação de Casos de Uso (Use Cases)
+
+**Padrão:** Especificações formais no padrão **Alistair Cockburn (Fully-Dressed)**.  
+
+---
+
+## 📌 `UC-01`: Autenticar Usuário no Sistema
+
+* **Ator Principal:** Usuário do Sistema (Gestor ou Operador Voluntário).
+* **Pré-condições:** O usuário possui cadastro ativo no servidor LLDAP da instituição.
+* **Pós-condições:** Usuário autenticado com token JWT emitido e redirecionado para o painel correspondente ao seu perfil.
+* **Requisitos Rastreados:** `REQ-AUTH-01`, `REQ-AUTH-02`.
+
+### Fluxo Principal (Caminho Feliz):
+1. O usuário acessa a URL do sistema e visualiza a tela de login.
+2. O usuário informa seu identificador de usuário e senha.
+3. O frontend valida o preenchimento dos campos e envia a requisição para o endpoint `/api/auth/login`.
+4. O backend realiza o bind no servidor LLDAP e recupera os grupos de permissão do usuário.
+5. O backend gera o token JWT assinado contendo os papéis de acesso e retorna código HTTP `200 OK`.
+6. O frontend armazena o token de forma segura e redireciona o usuário para o Dashboard.
+
+### Fluxos Alternativos & Exceções:
+* **3a. Credenciais Inválidas:** Se o LLDAP rejeitar o bind por senha incorreta, o backend retorna HTTP `401 Unauthorized` e o frontend exibe a mensagem amigável: *"Usuário ou senha incorretos."*
+* **3b. Servidor LLDAP Indisponível:** Se a conexão com o LLDAP falhar, o backend retorna HTTP `503 Service Unavailable` e registra log de erro estruturado.
+
+---
+
+## 📌 `UC-02`: [Nome do Caso de Uso Principal. Ex: Cadastrar Nova Doação]
+
+* **Ator Principal:** [Ex: Operador Voluntário].
+* **Pré-condições:** [Ex: Operador autenticado com papel `ROLE_OPERADOR`].
+* **Pós-condições:** [Ex: Registro persistido no SQLite e saldo atualizado no painel].
+* **Requisitos Rastreados:** `REQ-CORE-01`, `REQ-CORE-02`.
+
+### Fluxo Principal:
+1. O operador clica no botão "Novo Registro" no menu lateral.
+2. O sistema exibe o formulário de cadastro com os campos obrigatórios.
+3. O operador preenche os dados e aciona o botão "Salvar".
+4. O frontend valida a conformidade dos campos e envia payload JSON para o backend.
+5. O backend processa a regra de negócio, persiste a transação no SQLite e retorna HTTP `201 Created`.
+6. O sistema exibe notificação de sucesso e atualiza a listagem.
+</code></pre>
+        </div>
+
+        <!-- 6.5 -->
+        <h3 id="s6-5"><span class="num">6.5</span><code>04-user-stories.md</code> — Backlog Ágil de Histórias de Usuário</h3>
+        <p>
+          <strong>Padrão / Framework:</strong> <em>Agile Backlog · Padrão INVEST · Critérios Given / When / Then (GWT)</em>.<br>
+          <strong>Objetivo:</strong> Descrever os incrementos de software na perspectiva do usuário com critérios de aceitação automatizáveis em testes BDD/TDD. Cada história mapeia para uma Issue e Branch no GitHub.
+        </p>
+        <div class="code-block">
+          <div class="code-block__bar"><span>docs/04-user-stories.md</span><div class="dots"><span></span><span></span><span></span></div></div>
+          <pre><code># 04 — Backlog de Histórias de Usuário (User Stories)
+
+**Padrão:** Backlog Ágil refinado no padrão **INVEST** (Independent, Negotiable, Valuable, Estimable, Small, Testable) com critérios de aceitação no formato **Given / When / Then (GWT)**.  
+
+---
+
+## 🎯 Épico 1: Autenticação, Identidade & Controle de Acesso (AUTH)
+
+### 🔹 `US-01`: Login Unificado com Credenciais LLDAP
+* **Como** colaborador ou voluntário da organização parceira,
+* **Quero** autenticar-me na plataforma utilizando minhas credenciais corporativas LLDAP,
+* **Para que** eu não precise memorizar senhas avulsas e tenha acesso seguro às minhas funções.
+
+&gt; **Critérios de Aceitação (GWT):**
+&gt; * **Cenário 1 (Login com sucesso):**  
+&gt;   * **Dado** que sou um usuário ativo no diretório LLDAP,  
+&gt;   * **Quando** eu informo meu usuário e senha corretos na tela de login,  
+&gt;   * **Então** recebo meu token JWT e sou direcionado ao Dashboard do meu perfil.
+&gt; * **Cenário 2 (Senha incorreta):**  
+&gt;   * **Dado** que insiro uma senha divergente do LLDAP,  
+&gt;   * **Quando** aciono o botão "Entrar",  
+&gt;   * **Então** o sistema exibe a mensagem de erro *"Credenciais inválidas"* sem expor detalhes internos.
+* *Rastreabilidade:* `UC-01`, `REQ-AUTH-01`.
+
+---
+
+### 🔹 `US-02`: Segregação de Telas por Papel de Acesso (RBAC)
+* **Como** gestor da ONG,
+* **Quero** que voluntários operadores não tenham acesso às configurações administrativas e relatórios financeiros,
+* **Para que** os dados sensíveis da instituição sejam preservados conforme as regras de governança.
+
+&gt; **Critérios de Aceitação (GWT):**
+&gt; * **Cenário 1 (Acesso de Gestor):**  
+&gt;   * **Dado** que estou autenticado com a role `ROLE_GESTOR`,  
+&gt;   * **Quando** navego pela aplicação,  
+&gt;   * **Então** visualizo as abas de "Administração" e "Relatórios Gerenciais".
+&gt; * **Cenário 2 (Tentativa de acesso por Operador):**  
+&gt;   * **Dado** que estou autenticado com a role `ROLE_OPERADOR`,  
+&gt;   * **Quando** tento acessar a URL `/admin` diretamente,  
+&gt;   * **Então** o Route Guard do Angular bloqueia a navegação e me redireciona para a página de acesso negado (HTTP 403).
+* *Rastreabilidade:* `UC-01`, `REQ-AUTH-02`.
+
+---
+
+## 🎯 Épico 2: Gestão Operacional & Fluxo Central do Parceiro (CORE)
+
+### 🔹 `US-03`: [Título da US Principal 1. Ex: Cadastro Rápido de Beneficiário]
+* **Como** [Papel do Ator],
+* **Quero** [Ação pretendida no sistema],
+* **Para que** [Benefício real e mensurável para a operação].
+
+&gt; **Critérios de Aceitação (GWT):**
+&gt; * **Cenário 1 (Cadastro válido):**  
+&gt;   * **Dado** que todos os campos obrigatórios estão preenchidos corretamente,  
+&gt;   * **Quando** clico em "Salvar Beneficiário",  
+&gt;   * **Então** o registro é salvo no banco de dados e vejo um toast de sucesso.
+&gt; * **Cenário 2 (CPF duplicado):**  
+&gt;   * **Dado** que informo um CPF já existente na base,  
+&gt;   * **Quando** tento submeter o formulário,  
+&gt;   * **Então** o backend rejeita com HTTP 409 e o formulário destaca o campo duplicado.
+* *Rastreabilidade:* `UC-02`, `REQ-CORE-01`.
+
+---
+
+### 🔹 `US-04`: [Título da US Principal 2. Ex: Registro e Baixa de Doações]
+* **Como** [Papel do Ator],
+* **Quero** [Ação pretendida],
+* **Para que** [Benefício].
+
+&gt; **Critérios de Aceitação (GWT):**
+&gt; * **Cenário 1 (Baixa com saldo suficiente):**  
+&gt;   * **Dado** que há estoque disponível do item solicitado,  
+&gt;   * **Quando** confirmo a entrega ao beneficiário,  
+&gt;   * **Então** a quantidade é subtraída do estoque e o histórico é registrado.
+* *Rastreabilidade:* `REQ-CORE-03`.
+
+---
+
+### 🔹 `US-05`: [Título da US Principal 3. Ex: Emissão de Relatório Mensal]
+* **Como** gestor da organização parceira,
+* **Quero** gerar um relatório consolidado das atividades do mês em formato PDF,
+* **Para que** eu possa prestar contas aos órgãos reguladores e à comunidade do impacto social realizado.
+
+&gt; **Critérios de Aceitação (GWT):**
+&gt; * **Cenário 1 (Geração de relatório):**  
+&gt;   * **Dado** que selecionei o mês e ano desejados,  
+&gt;   * **Quando** clico em "Exportar PDF",  
+&gt;   * **Então** o sistema faz o download de um documento formatado contendo os totais de atendimentos.
+* *Rastreabilidade:* `REQ-REP-01`.
+</code></pre>
+        </div>
+
+        <!-- 6.6 -->
+        <h3 id="s6-6"><span class="num">6.6</span><code>05-devops-and-cicd.md</code> — Esteira DevOps &amp; Qualidade</h3>
+        <p>
+          <strong>Padrão / Framework:</strong> <em>Git Flow, GitHub Actions, SonarQube Quality Gate &amp; SemVer</em>.<br>
+          <strong>Objetivo:</strong> Definir as regras de proteção de branch (`main` e `develop`), a esteira de CI/CD automatizada com varreduras SAST/DAST e o versionamento semântico (`v0.1.0-alpha`, `v0.5.0-beta`, `v1.0.0`).
+        </p>
+        <div class="code-block">
+          <div class="code-block__bar"><span>docs/05-devops-and-cicd.md</span><div class="dots"><span></span><span></span><span></span></div></div>
+          <pre><code># 05 — DevOps, Pipeline CI/CD & Gestão de Qualidade
+
+**Padrão:** Estrutura de automação de engenharia e esteira de entrega contínua (**GitHub Actions + SonarQube + SemVer**).  
+
+---
+
+## 1. Estratégia de Ramificação (Git Flow Adaptado)
+
+```
+main (Produção - Apenas Releases estáveis taggeadas v1.0.0)
+  ▲
+  │ (Pull Request com Quality Gate Verde)
+develop (Ambiente de Integração & Staging)
+  ▲
+  ├── feature/US-01-login-lldap
+  ├── feature/US-02-rbac-guards
+  └── feature/US-03-cadastro-beneficiario
+```
+
+* **Regras de Proteção de Branch:**
+  - Proibido commit direto na `main` e na `develop`.
+  - Todo merge exige Pull Request com pelo menos 1 aprovação (Peer Review).
+  - O pipeline de CI/CD deve executar e passar 100% dos testes e Quality Gate antes do merge.
+
+---
+
+## 2. Pipeline de CI/CD (`.github/workflows/ci-cd.yml`)
+
+O workflow executa automaticamente em cada `push` e `pull_request`:
+
+```yaml
+name: CI/CD Pipeline - Full Stack Extension
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  backend-build-test:
+    name: Backend Build & Test (Spring Boot)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Java 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+      - name: Build and Run Tests
+        run: |
+          cd backend
+          ./mvnw clean verify
+
+  frontend-build-test:
+    name: Frontend Build & Lint (Angular)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install Dependencies & Lint
+        run: |
+          cd frontend
+          npm ci
+          npm run lint --if-present
+          npm run build -- --configuration production
+
+  sonarqube-quality-gate:
+    name: SonarQube Quality Gate Audit
+    needs: [backend-build-test, frontend-build-test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v2
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+```
+
+---
+
+## 3. Padrão de Versionamento Semântico (SemVer)
+
+* **`v0.1.0-alpha` (Meet 06):** Protótipo navegável inicial com tela de login e esqueleto das rotas.
+* **`v0.5.0-beta` (Meet 12):** Versão homologada com dados reais e regras de negócio completas.
+* **`v1.0.0` (Meet 16):** Versão final de produção apresentada na Feira de Extensão Senac.
+</code></pre>
+        </div>
+
+        <!-- 6.7 -->
+        <h3 id="s6-7"><span class="num">6.7</span><code>06-ui-ux-screen-descriptions.md</code> — Telas &amp; Acessibilidade</h3>
+        <p>
+          <strong>Padrão / Framework:</strong> <em>Design System, Wireframing &amp; WCAG 2.1 AA</em>.<br>
+          <strong>Objetivo:</strong> Registrar a anatomia de cada tela do frontend Angular, mapa de navegação (Sitemap) e checklist de acessibilidade (contraste, foco visível e suporte a leitores de tela).
+        </p>
+        <div class="code-block">
+          <div class="code-block__bar"><span>docs/06-ui-ux-screen-descriptions.md</span><div class="dots"><span></span><span></span><span></span></div></div>
+          <pre><code># 06 — Especificação de Telas & Diretrizes de UI/UX
+
+---
+
+## 1. Mapa de Navegação da Aplicação (Sitemap)
+
+* `/login` &rarr; Tela de Autenticação Centralizada.
+* `/dashboard` &rarr; Painel Principal com métricas e atalhos rápidos.
+* `/cadastros/novo` &rarr; Formulário de Inserção de Registros.
+* `/cadastros/listar` &rarr; Tabela paginada com busca, ordenação e filtros.
+* `/relatorios` &rarr; Central de Exportação de Dados (PDF/CSV).
+* `/perfil` &rarr; Dados do Usuário Autenticado e Informações de Sessão.
+
+---
+
+## 2. Wireframes Estruturais & Layout dos Componentes
+
+### 🖥️ Tela 01: Login (`/login`)
+```
++-------------------------------------------------------+
+|                 [ Logo da ONG Parceira ]              |
+|                                                       |
+|   Usuário (LDAP):  [___________________________]      |
+|   Senha:           [___________________________]      |
+|                                                       |
+|                    [    Entrar no Sistema    ]        |
+|                                                       |
+|   (i) Autenticação segura integrada à rede Senac / ONG |
++-------------------------------------------------------+
+```
+
+### 🖥️ Tela 02: Dashboard Principal (`/dashboard`)
+```
++-------------------------------------------------------------------------+
+| [Logo] Sistema de Extensão               Olá, [Nome] (Gestor) | Sair   |
++-------------------------------------------------------------------------+
+| [Menu]       |  [ Card 1: Atendimentos ]  [ Card 2: Saldo / Estoque ]    |
+| - Início     |  Total: 142 famílias       Disponível: 85 cestas         |
+| - Cadastros  +---------------------------------------------------------+
+| - Relatórios |  Tabela de Atividades Recentes:                          |
+| - Admin      |  Data       | Beneficiário    | Operador   | Status     |
+|              |  04/09/2026 | Maria Silva     | Carlos (V) | Concluído  |
++--------------+---------------------------------------------------------+
+```
+
+---
+
+## 3. Checklist de Acessibilidade (WCAG 2.1 AA)
+
+- [ ] Contraste de texto mínimo de 4.5:1 para texto normal e 3:1 para texto grande.
+- [ ] Todos os campos de formulário possuem `&lt;label&gt;` semanticamente associado via `for`/`id`.
+- [ ] O sistema é 100% navegável utilizando apenas o teclado (&lt;kbd&gt;Tab&lt;/kbd&gt;, &lt;kbd&gt;Enter&lt;/kbd&gt;, &lt;kbd&gt;Esc&lt;/kbd&gt;).
+- [ ] Elementos interativos possuem estados visíveis de foco (`:focus-visible`).
+</code></pre>
+        </div>
+
+        <!-- 6.8 -->
+        <h3 id="s6-8"><span class="num">6.8</span><code>07-ui-ux-walkthrough-roadmap.md</code> — Roteiro de Validação com a ONG</h3>
+        <p>
+          <strong>Padrão / Framework:</strong> <em>Customer Co-Design &amp; Usability Walkthrough</em>.<br>
+          <strong>Objetivo:</strong> Acompanhar a homologação e aprovação dos wireframes e protótipos junto aos representantes da organização parceira antes do início do desenvolvimento pesado.
+        </p>
+        <div class="code-block">
+          <div class="code-block__bar"><span>docs/07-ui-ux-walkthrough-roadmap.md</span><div class="dots"><span></span><span></span><span></span></div></div>
+          <pre><code># 07 — UI/UX Walkthrough Roadmap & Checklist
+
+Guia de validação visual das telas com os representantes da organização parceira antes do início das sprints de código.
+
+---
+
+## 📋 Checklist de Validação com o Cliente Real
+
+| Tela / Fluxo | Wireframe Aprovado? | Feedback Coletado da ONG | Status |
+| :--- | :---: | :--- | :---: |
+| **01. Tela de Login** | [ ] | Campos claros, mensagens de erro em português simples. | Pendente |
+| **02. Dashboard Principal** | [ ] | Cards de métricas refletem os números que a diretoria precisa ver. | Pendente |
+| **03. Formulário de Cadastro** | [ ] | Ordem dos campos segue o fluxo natural de atendimento presencial. | Pendente |
+| **04. Listagem & Busca** | [ ] | Filtros por data e nome funcionam de forma rápida. | Pendente |
+| **05. Relatório em PDF** | [ ] | Cabeçalho e rodapé atendem às exigências de prestação de contas. | Pendente |
+</code></pre>
+        </div>
+
+        <!-- 6.9 -->
+        <h3 id="s6-9"><span class="num">6.9</span><code>08-bootstrap-plan.md</code> — Inicialização do Monorepo</h3>
+        <p>
+          <strong>Padrão / Framework:</strong> <em>Project Scaffolding &amp; Developer Experience (DX)</em>.<br>
+          <strong>Objetivo:</strong> Orientar a criação da árvore monorepo do projeto (`backend/`, `frontend/`, `docs/`) e fornecer comandos rápidos de inicialização para o time.
+        </p>
+        <div class="code-block">
+          <div class="code-block__bar"><span>docs/08-bootstrap-plan.md</span><div class="dots"><span></span><span></span><span></span></div></div>
+          <pre><code># 08 — Bootstrap Plan: Inicialização do Repositório do Projeto
+
+Guia passo a passo para a equipe estruturar o repositório oficial no GitHub.
+
+---
+
+## 1. Estrutura Padrão de Diretórios
+
+```
+seu-projeto-extensao/
+├── .github/
+│   └── workflows/
+│       └── ci-cd.yml          # Pipeline automatizado de testes e SonarQube
+├── backend/                   # Projeto Spring Boot 3.x (Java 21)
+│   ├── src/
+│   │   ├── main/java/...
+│   │   └── test/java/...
+│   ├── pom.xml
+│   └── mvnw
+├── frontend/                  # Aplicação Angular 17+ (TypeScript)
+│   ├── src/
+│   ├── angular.json
+│   └── package.json
+├── docs/                      # Documentação de Engenharia (Esta pasta!)
+│   ├── 00-architecture-frontier.md
+│   ├── 01-project-charter.md
+│   ├── 02-software-requirements-specification.md
+│   ├── 03-use-cases.md
+│   ├── 04-user-stories.md
+│   ├── 05-devops-and-cicd.md
+│   ├── 06-ui-ux-screen-descriptions.md
+│   ├── 07-ui-ux-walkthrough-roadmap.md
+│   └── README.md
+└── README.md                  # Apresentação do projeto e instruções de execução
+```
+
+---
+
+## 2. Comandos de Inicialização Rápida
+
+### Backend (Spring Boot):
+```bash
+# Na pasta raiz do seu repositório:
+mkdir backend && cd backend
+# Inicialize com Spring Web, Spring Data JPA, Validation e Security
+```
+
+### Frontend (Angular):
+```bash
+# Na pasta raiz do seu repositório:
+npx @angular/cli@17 new frontend --routing --style=css --ssr=false
+```
+</code></pre>
+        </div>
+
+        <!-- 6.10 -->
+        <h3 id="s6-10"><span class="num">6.10</span><code>README.md</code> — Índice e Governança da Documentação</h3>
+        <p>
+          <strong>Padrão / Framework:</strong> <em>Document Lifecycle Index &amp; Traceability Matrix</em>.<br>
+          <strong>Objetivo:</strong> Atuar como ponto de entrada para a documentação na raiz da pasta `docs/`, apresentando a ordem recomendada de leitura e a cadeia de rastreabilidade do projeto.
+        </p>
+        <div class="code-block">
+          <div class="code-block__bar"><span>docs/README.md</span><div class="dots"><span></span><span></span><span></span></div></div>
+          <pre><code># 📚 Suite de Documentação de Engenharia de Software — Projeto de Extensão Full Stack
+
+Esta pasta `docs/` reúne os templates padronizados para guiar as equipes da disciplina **Unidade de Extensão: Full Stack (ADS 5P - 2026.2)** desde a concepção com o parceiro real até o deploy em produção.
+
+---
+
+## 🧭 Ordem Recomendada de Preenchimento & Leitura
+
+1. 📄 [`01-project-charter.md`](01-project-charter.md) — **O Porquê:** Justificativa da dor da ONG parceira, escopo in/out, stakeholders e metas SMART. *(Entrega 1)*
+2. 📄 [`04-user-stories.md`](04-user-stories.md) — **O Backlog:** As 5 primeiras User Stories no padrão INVEST com critérios Given/When/Then. *(Entrega 2)*
+3. 📄 [`00-architecture-frontier.md`](00-architecture-frontier.md) — **A Arquitetura:** Diagramas C4 de contexto e decisões técnicas (ADRs).
+4. 📄 [`02-software-requirements-specification.md`](02-software-requirements-specification.md) — **A Especificação:** Requisitos funcionais `REQ-*` e não funcionais `NFR-*` (IEEE 29148).
+5. 📄 [`03-use-cases.md`](03-use-cases.md) — **Os Fluxos:** Casos de uso detalhados com fluxos alternativos e exceções (Cockburn).
+6. 📄 [`05-devops-and-cicd.md`](05-devops-and-cicd.md) — **A Esteira:** Git Flow, CI/CD GitHub Actions, SonarQube Quality Gate e SemVer.
+7. 📄 [`06-ui-ux-screen-descriptions.md`](06-ui-ux-screen-descriptions.md) — **A Interface:** Wireframes estruturais, mapa de telas e acessibilidade WCAG.
+8. 📄 [`07-ui-ux-walkthrough-roadmap.md`](07-ui-ux-walkthrough-roadmap.md) — **A Validação:** Checklist de aprovação de telas com a ONG parceira.
+9. 📄 [`08-bootstrap-plan.md`](08-bootstrap-plan.md) — **O Setup:** Estrutura de pastas do repositório monorepo (`backend/`, `frontend/`, `docs/`).
+
+---
+
+## 🔗 Cadeia de Rastreabilidade (Traceability Chain)
+
+```
+Project Charter (Visão & Dores)
+  └── SRS (REQ-*)
+        └── Casos de Uso (UC-*)
+              └── User Stories (US-* com GWT)
+                    └── GitHub Issues / Pull Requests (Branches feature/US-*)
+                          └── Commits & Pipeline CI/CD (SonarQube Quality Gate)
+```
+</code></pre>
         </div>
       </section>
 
