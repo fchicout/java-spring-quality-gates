@@ -714,6 +714,14 @@
             <li><a href="#s6-10">6.10 Índice &amp; Governança (README)</a></li>
           </ol>
         </li>
+        <li><a href="#s7">7 · Tutorial de Provisionamento &amp; Secrets</a>
+          <ol>
+            <li><a href="#s7-1">7.1 Criando Projeto no SonarQube (sonar.fchicout.dev)</a></li>
+            <li><a href="#s7-2">7.2 Configuração de GitHub Actions Secrets</a></li>
+            <li><a href="#s7-3">7.3 Regras de Proteção de Branches (Quality Gates)</a></li>
+            <li><a href="#s7-4">7.4 Checklist de Compilação &amp; Execução Local</a></li>
+          </ol>
+        </li>
       </ol>
     </nav>
     <div class="toc__foot">
@@ -1816,6 +1824,151 @@ Project Charter (Visão & Dores)
                           └── Commits & Pipeline CI/CD (SonarQube Quality Gate)
 ```
 </code></pre>
+        </div>
+      </section>
+
+      <!-- ============ SECTION 7 ============ -->
+      <section class="doc-section" id="s7">
+        <div class="section-head"><span class="num">07</span><h2>Tutorial de Provisionamento, Secrets &amp; GitHub Configuration</h2></div>
+
+        <p class="lede">
+          Guia prático para configuração inicial do ambiente de engenharia, provisionamento do projeto no <strong>SonarQube institucional</strong>, cadastro de <strong>GitHub Actions Secrets</strong> e ativação das travas automáticas de qualidade (Quality Gates).
+        </p>
+
+        <!-- 7.1 -->
+        <h3 id="s7-1"><span class="num">7.1</span>Criando o Projeto no SonarQube (<code>sonar.fchicout.dev</code>)</h3>
+        <p>
+          Para que o passo de análise estática e Quality Gate funcione sem bloqueios na esteira, o projeto precisa estar registrado na instância SonarQube do professor.
+        </p>
+        <div class="rule-card">
+          <div class="rule-card__head">
+            <span class="gate-tag gate-tag--sec">Passo a Passo · SonarQube</span>
+            <strong>Cadastro e Geração de Token de Análise</strong>
+          </div>
+          <ol style="margin: 8px 0 0 20px; font-size: 0.92rem;">
+            <li>Acesse o servidor institucional: <a href="https://sonar.fchicout.dev" target="_blank" rel="noopener"><strong>https://sonar.fchicout.dev</strong></a>.</li>
+            <li>Faça login com suas credenciais fornecidas pelo professor ou via login institucional.</li>
+            <li>No canto superior direito, clique em <strong>Projects</strong> &gt; <strong>Create Project</strong> &gt; selecione <strong>Manually</strong>.</li>
+            <li>Preencha os dados do projeto da sua equipe:
+              <ul>
+                <li><strong>Project display name:</strong> Ex: <code>Fullstack - Equipe DaMatch</code> (ou o nome da sua equipe).</li>
+                <li><strong>Project key:</strong> Ex: <code>senac-fullstack-damatch</code> (deve bater com a propriedade <code>&lt;sonar.projectKey&gt;</code> no <code>pom.xml</code> raiz).</li>
+                <li><strong>Main branch name:</strong> Defina como <code>main</code>.</li>
+              </ul>
+            </li>
+            <li>Clique em <strong>Set Up</strong>. Na tela de método de análise, escolha <strong>With GitHub Actions</strong>.</li>
+            <li><strong>Gerar Token de Autenticação:</strong>
+              <ul>
+                <li>Acesse o menu do seu perfil no canto superior direito &gt; <strong>My Account</strong> &gt; aba <strong>Security</strong>.</li>
+                <li>Em <em>Generate Tokens</em>, digite um nome (ex: <code>github-actions-damatch</code>), tipo <strong>Project Analysis Token</strong> (ou <em>User Token</em>) e selecione o projeto criado.</li>
+                <li>Clique em <strong>Generate</strong> e <u>copie o token hexadecimal imediatamente</u> (ele não será exibido novamente).</li>
+              </ul>
+            </li>
+          </ol>
+        </div>
+
+        <!-- 7.2 -->
+        <h3 id="s7-2"><span class="num">7.2</span>Configuração de Secrets no Repositório GitHub</h3>
+        <p>
+          Os segredos e credenciais de esteira <strong>nunca</strong> devem ser commitados no código-fonte. Cadastre-os como <em>Repository Secrets</em> no GitHub:
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Nome do Secret</th>
+                <th>Valor Obrigatório</th>
+                <th>Finalidade</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>SONAR_TOKEN</code></td>
+                <td>Token hexadecimal gerado no SonarQube</td>
+                <td>Autentica o Maven Sonar Plugin para enviar o relatório JaCoCo e consultar o Quality Gate.</td>
+              </tr>
+              <tr>
+                <td><code>SONAR_HOST_URL</code></td>
+                <td><code>https://sonar.fchicout.dev</code></td>
+                <td>URL da instância SonarQube (se omitido, o workflow usa o default institucional).</td>
+              </tr>
+              <tr>
+                <td><code>GITHUB_TOKEN</code></td>
+                <td><em>Automático (Nativo do GitHub)</em></td>
+                <td>Utilizado pelo Gitleaks, upload de SARIFs de segurança e publicação de pacotes.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="rule-card" style="margin-top: 16px;">
+          <div class="rule-card__head">
+            <span class="gate-tag gate-tag--sec">Configuração no GitHub</span>
+            <strong>Onde cadastrar no repositório</strong>
+          </div>
+          <ol style="margin: 8px 0 0 20px; font-size: 0.92rem;">
+            <li>Acesse o repositório do seu time no GitHub (ex: <code>github.com/Diogo746/Projeto-Full-Stack</code>).</li>
+            <li>Vá na aba <strong>Settings</strong> &gt; no menu lateral esquerdo expanda <strong>Secrets and variables</strong> &gt; clique em <strong>Actions</strong>.</li>
+            <li>Clique no botão verde <strong>New repository secret</strong>.</li>
+            <li>Crie o secret <code>SONAR_TOKEN</code> com o valor do token gerado.</li>
+            <li>Em <strong>Settings</strong> &gt; <strong>Actions</strong> &gt; <strong>General</strong> &gt; role até <strong>Workflow permissions</strong> e garanta que está marcado: <strong>Read and write permissions</strong>.</li>
+          </ol>
+        </div>
+
+        <!-- 7.3 -->
+        <h3 id="s7-3"><span class="num">7.3</span>Regras de Proteção de Branches (Quality Gates)</h3>
+        <p>
+          Para garantir que nenhum código quebre a compilação ou viole os limites de cobertura e vulnerabilidades, configure as <em>Branch Protection Rules</em> no GitHub:
+        </p>
+        <div class="branch-grid">
+          <div class="branch-card">
+            <h4><span class="branch-pill">development</span> Staging Branch</h4>
+            <ul style="padding-left: 18px; margin: 0; font-size: 0.88rem; color: var(--ink-muted);">
+              <li><strong>Require a pull request before merging:</strong> 1 aprovação obrigatória.</li>
+              <li><strong>Require status checks to pass:</strong>
+                <ul>
+                  <li><code>🧪 Lint &amp; Automated Tests</code></li>
+                  <li><code>🛡️ SonarQube Quality Gate</code></li>
+                  <li><code>🔒 SAST - Semgrep Security Audit</code></li>
+                  <li><code>📦 Supply Chain - Syft (SBOM) &amp; Grype (CVEs)</code></li>
+                </ul>
+              </li>
+              <li><strong>Require branches to be up to date before merging:</strong> Ativado.</li>
+            </ul>
+          </div>
+          <div class="branch-card">
+            <h4><span class="branch-pill">main</span> Production Branch</h4>
+            <ul style="padding-left: 18px; margin: 0; font-size: 0.88rem; color: var(--ink-muted);">
+              <li><strong>Direct Push bloqueado:</strong> Apenas merges vindos de PRs da branch <code>development</code> ou tags <code>v*</code>.</li>
+              <li><strong>Status Checks Obrigatórios:</strong> Todas as fases anteriores + DAST Security Scans.</li>
+              <li><strong>SemVer Obrigatório:</strong> Todo merge em <code>main</code> deve gerar uma release tag (ex: <code>v1.0.0</code>).</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 7.4 -->
+        <h3 id="s7-4"><span class="num">7.4</span>Checklist de Compilação &amp; Execução Local</h3>
+        <p>
+          Antes de abrir um Pull Request, os desenvolvedores da equipe devem executar localmente a suíte de validação para garantir <strong>Zero Falhas</strong> na esteira remota:
+        </p>
+        <div class="code-block">
+          <div class="code-block__bar"><span>Terminal · Validação Pré-Commit / Pré-PR</span><div class="dots"><span></span><span></span><span></span></div></div>
+          <pre><code># 1. Validação Completa do Backend (Spring Boot 3 + Java 21)
+mvn -B checkstyle:check test jacoco:report -f backend/pom.xml
+
+# 2. Validação Completa do Frontend (Angular 22 Zoneless)
+cd frontend
+npm ci
+npm run lint              # Executa ESLint com regras de inject()
+npm run test:coverage     # Executa Vitest com relatório v8
+npm run build             # Valida compilação de produção com @angular/build (esbuild)
+
+# 3. Se todos os comandos acima retornarem código 0, faça o commit e abra o PR:
+git checkout -b feature/US-01-cadastro-doador
+git commit -m "feat(doador): implementar cadastro de doadores com testes e validacoes"
+git push origin feature/US-01-cadastro-doador
+# Abrir PR contra a branch 'development'</code></pre>
         </div>
       </section>
 
